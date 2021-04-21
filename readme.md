@@ -11,10 +11,16 @@ This is not a secure server and should only be hosted in a private/local network
 The content of the code has been modified for general usage although it may not be functional.
 
 OutlookFormController -> handles selenium/browser control
+
 OutlookUser -> handles user objects and management of users
+
 interface -> contains global constant as well as values used for the survey
+
 app -> contain the flask web app that handles api request to add/delete user
+
 Queue -> contain class for the Priority Queue implementation
+
+
 
 packages installed
 
