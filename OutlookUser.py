@@ -91,6 +91,7 @@ class OutlookUser:
             formCtrl.fillTextQuestion(FormParameters.Q2,self.param2)
             formCtrl.fillChoiceQuestion(FormParameters.Q3,param3)
             formCtrl.fillTextQuestion(FormParameters.Q4,param4)
+            formCtrl.getEmail()
             '''
             if not formCtrl.submitForm():
                 raise(ValueError("Invalid/missing form information"))
@@ -103,7 +104,7 @@ class OutlookUser:
         try:
             self.submitForm(task[-1])
             if self.telegramID:
-                informTelegram(f"Unable to submit form for {self.email} at {task[0].ctime()}",telegramID=self.telegramID)
+                informTelegram(f"Form submitted for {self.email} at {task[0].ctime()}",telegramID=self.telegramID)
             print(f"Form submitted for {self.email} at {task[0].ctime()}")
         except:
             if self.telegramID:

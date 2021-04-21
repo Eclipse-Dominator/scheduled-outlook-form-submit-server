@@ -72,6 +72,11 @@ class OutlookFormController:
     def fillChoiceQuestion(self, questionId:str, choice:str):
         answerBox = self.driver.find_element_by_xpath("//div[@aria-labelledby='{}']//span[text()='{}']".format(questionId,choice))
         answerBox.click()
+
+    def getEmail(self):
+        #office-form-email-receipt-checkbox-description
+        checkBox = self.driver.find_element_by_xpath("//span[@class='office-form-email-receipt-checkbox-description']")
+        checkBox.click()
         
     def submitForm(self):
         submitBtn = self.driver.find_element_by_xpath("//button[@title='Submit']")
