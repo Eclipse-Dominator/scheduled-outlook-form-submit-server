@@ -95,10 +95,19 @@ class OutlookUser:
             '''
             if not formCtrl.submitForm():
                 raise(ValueError("Invalid/missing form information"))
-        except:
-            formCtrl.endController(err=True,id=self.telegramID)
+        except Exception as e:
+            print(e)
+            formCtrl.endController()
+            informTelegram("error",formCtrl.screenshot)
+            if self.telegramID:
+                informTelegram("error",formCtrl.screenshot,self.telegramID)    
             raise(ValueError("unable to submit form"))
-        formCtrl.endController(err=DebugSettings.VERBOSE)
+
+        formCtrl.endController()
+        if DebugSettings.VERBOSE:
+            informTelegram("submission success",formCtrl.screenshot)
+            if self.telegramID:
+                informTelegram("submission success",formCtrl.screenshot,self.telegramID) 
 
     def doTask(self,task):
         try:

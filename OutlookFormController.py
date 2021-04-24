@@ -11,7 +11,6 @@ class OutlookFormController:
 
     # takes chrome service driver location as input.
     def __init__(self,webdriverUrl:str,session_user:str=""):
-        self.session_user = session_user
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
@@ -22,14 +21,11 @@ class OutlookFormController:
         self.implicitWaitTime = 5
         self.wait = WebDriverWait(self.driver,15)
         self.driver.implicitly_wait(self.implicitWaitTime) 
+        self.screenshot = None
     
-    def endController(self,err=False,id=None): # if err == True, driver will take a screenshot before existing and send to the user with the telegram id
-        if err:
-            if id:
-                informTelegram(self.session_user,self.driver.get_screenshot_as_png(),id)    
-            informTelegram(self.session_user,self.driver.get_screenshot_as_png())
-        else:
-            self.wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
+    def endController(self): # if driver will take a screenshot and exit 
+        self.wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
+        self.screenshot=self.driver.get_screenshot_as_png()
         self.driver.quit()
     
     def loadForm(self, website:str):
@@ -79,7 +75,7 @@ class OutlookFormController:
         checkBox.click()
         
     def submitForm(self):
-        submitBtn = self.driver.find_element_by_xpath("//button[@title='Submit']")
+        submitBtn = self.driver.find_element_by_xpath("//button[@title='Submit']") #  name can change depending on language locality
         submitBtn.click()
 
         if self.checkError((By.CLASS_NAME,"thank-you-page-confirm"),2):
