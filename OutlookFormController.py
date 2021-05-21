@@ -10,7 +10,7 @@ class OutlookFormController:
     # Controller to handle simple outlook forms for organisations
 
     # takes chrome service driver location as input.
-    def __init__(self,webdriverUrl:str,session_user:str=""):
+    def __init__(self,webdriverUrl:str):
         chrome_options = Options()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--disable-gpu")
@@ -23,7 +23,7 @@ class OutlookFormController:
         self.driver.implicitly_wait(self.implicitWaitTime) 
         self.screenshot = None
     
-    def endController(self): # if driver will take a screenshot and exit 
+    def endController(self):
         self.wait.until(lambda driver: driver.execute_script("return document.readyState") == "complete")
         self.screenshot=self.driver.get_screenshot_as_png()
         self.driver.quit()
@@ -31,7 +31,7 @@ class OutlookFormController:
     def loadForm(self, website:str):
         self.driver.get(website)
 
-    def checkError(self,byError,timer = 1): # check for presence of any error message 
+    def checkError(self,byError,timer = 1):
         try:
             self.driver.implicitly_wait(timer) 
             self.driver.find_element(*byError)
@@ -62,21 +62,22 @@ class OutlookFormController:
         
 
     def fillTextQuestion(self, questionId:str, text:str):
-        answerBox = self.driver.find_element_by_xpath("//div[@aria-labelledby='{}']//input".format(questionId))
+        answerBox = self.driver.find_element_by_xpath("//input[@aria-labelledby='{}']".format(questionId))
         answerBox.send_keys(text)
 
     def fillChoiceQuestion(self, questionId:str, choice:str):
         answerBox = self.driver.find_element_by_xpath("//div[@aria-labelledby='{}']//span[text()='{}']".format(questionId,choice))
         answerBox.click()
-
+        
     def getEmail(self):
         #office-form-email-receipt-checkbox-description
         checkBox = self.driver.find_element_by_xpath("//span[@class='office-form-email-receipt-checkbox-description']")
         checkBox.click()
         
-    def submitForm(self):
-        submitBtn = self.driver.find_element_by_xpath("//button[@title='Submit']") #  name can change depending on language locality
+    def submitForm(self): 
+        submitBtn = self.driver.find_element_by_xpath("//button[@title='提交']")
         submitBtn.click()
+        #submitBtn.send_keys(Keys.RETURN)
 
         if self.checkError((By.CLASS_NAME,"thank-you-page-confirm"),2):
             print("Form Submitted")
